@@ -1,1 +1,1 @@
-#4 digit 7 segment display
+# 4 digit 7 segment display
