@@ -2,6 +2,8 @@ int intA = 11, intB = 7, intC = 4, intD = 2, intE = 1, intF = 10;
 int intDP = 3, intG = 5, intDig1 = 12, intDig2 = 9, intDig3 = 8, intDig4 = 6;
 int intNumberToDisplay = 0;
 long lngDelayAccumulatedMicro = 0;
+const int buttonPin = 13;
+int buttonState = 0;
 
 void setup() {
   // Pins do arduino correspondentes aos segmentos e digitos
@@ -9,6 +11,7 @@ void setup() {
   for (int intPinNumber = 1; intPinNumber <= 12; intPinNumber++) {
     pinMode(intPinNumber, OUTPUT);
   }
+  pinMode(buttonPin, INPUT);
 }
 
 // Esquema do display visto de cima:
@@ -150,7 +153,7 @@ void disp_dp() {
 
 void loop() {
   int intDelayMicro = 2000, intResto = 0;
- 
+
   int intMilhares = intNumberToDisplay / 1000;
 
   intResto = intNumberToDisplay % 1000;
@@ -181,5 +184,9 @@ void loop() {
     intNumberToDisplay += 1;
   }
 
-  if ( intNumberToDisplay >= 9999 ) intNumberToDisplay = 0;
+  buttonState = digitalRead(buttonPin);
+  if (buttonState == HIGH) {
+    intNumberToDisplay += 1;
+  }
+  if ( intNumberToDisplay >= 9999 ) intNumberToDisplay = 0;  
 } // End loop()
