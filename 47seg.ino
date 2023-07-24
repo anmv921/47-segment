@@ -4,6 +4,7 @@ int intNumberToDisplay = 0;
 long lngDelayAccumulatedMicro = 0;
 const int buttonPin = 13;
 int buttonState = 0;
+int intHoras = 15, intMinutos = 49, intSegundos = 0;
 
 void setup() {
   // Pins do arduino correspondentes aos segmentos e digitos
@@ -152,41 +153,51 @@ void disp_dp() {
 }
 
 void loop() {
-  int intDelayMicro = 2000, intResto = 0;
+  int intDelayMicro = 2000;
 
-  int intMilhares = intNumberToDisplay / 1000;
-
-  intResto = intNumberToDisplay % 1000;
-
-  int intCentenas = intResto / 100;
-
-  intResto %= 100;
-
-  int intUnidades = intResto % 10;
-
-  int intDezenas = intResto / 10;
+  int intDigito1 = 0, intDigito2 = 0, intDigito3 = 0, intDigito4 = 0;
   
-  disp(intUnidades, 4);
+  intDigito1 = intHoras / 10;
+  intDigito2 = intHoras % 10;
+
+  intDigito3 = intMinutos / 10;
+  intDigito4 = intMinutos % 10;
+
+  disp(intDigito4, 4);
   delayMicroseconds(intDelayMicro);
   lngDelayAccumulatedMicro += intDelayMicro;
-  if ( intNumberToDisplay >= 10 ) disp(intDezenas, 3);
+  //if ( intNumberToDisplay >= 10 ) 
+  disp(intDigito3, 3);
   delayMicroseconds(intDelayMicro);
   lngDelayAccumulatedMicro += intDelayMicro;
-  if ( intNumberToDisplay >= 100 ) disp(intCentenas, 2);
+  //if ( intNumberToDisplay >= 100 )
+  disp(intDigito2, 2);
   delayMicroseconds(intDelayMicro);
   lngDelayAccumulatedMicro += intDelayMicro;
-  if ( intNumberToDisplay >= 1000) disp(intMilhares, 1);
+  //if ( intNumberToDisplay >= 1000) 
+  disp(intDigito1, 1);
   delayMicroseconds(intDelayMicro);
   lngDelayAccumulatedMicro += intDelayMicro;
 
   if (lngDelayAccumulatedMicro == 1000000) {
     lngDelayAccumulatedMicro = 0;
-    intNumberToDisplay += 1;
+    intSegundos += 1;
   }
 
   buttonState = digitalRead(buttonPin);
   if (buttonState == HIGH) {
-    intNumberToDisplay += 1;
+    intSegundos += 1;
   }
-  if ( intNumberToDisplay >= 9999 ) intNumberToDisplay = 0;  
+
+  if ( intSegundos >= 60 )  {
+    intSegundos = 0;  
+    intMinutos += 1;
+  }
+  if ( intMinutos >= 60 ) {
+    intMinutos = 0;
+    intHoras += 1;
+  }
+  if (intHoras >= 24 ) {
+    intHoras = 0;
+  }
 } // End loop()
